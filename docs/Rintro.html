@@ -902,15 +902,14 @@ output (i.e., a result). Here’s a schematic of how a function works:</p>
 some of which could be defined by default in the function; these default values may
 be modified by the user by specifying options.</p>
 <p>Arguments can be <strong>matched by name</strong>; unnamed arguments will be <strong>matched by position</strong>.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1">values &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">1.45</span>, <span class="fl">2.34</span>, <span class="fl">5.68</span>)</a>
-<a class="sourceLine" id="cb37-2" data-line-number="2"><span class="kw">round</span>(<span class="dt">x =</span> values, <span class="dt">digits =</span> <span class="dv">1</span>) <span class="co"># match by name</span></a></code></pre></div>
-<pre><code>## [1] 1.4 2.3 5.7</code></pre>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="kw">round</span>(values, <span class="dv">1</span>) <span class="co"># match by position</span></a></code></pre></div>
-<pre><code>## [1] 1.4 2.3 5.7</code></pre>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1"><span class="kw">round</span>(<span class="dv">1</span>, values) <span class="co"># be careful when matching by position!</span></a></code></pre></div>
-<pre><code>## [1] 1 1 1</code></pre>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1"><span class="kw">round</span>(<span class="dt">digits =</span> <span class="dv">1</span>, <span class="dt">x =</span> values) <span class="co"># matching by name is safer!</span></a></code></pre></div>
-<pre><code>## [1] 1.4 2.3 5.7</code></pre>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="kw">round</span>(<span class="dt">x =</span> <span class="fl">2.34</span>, <span class="dt">digits =</span> <span class="dv">1</span>) <span class="co"># match by name</span></a></code></pre></div>
+<pre><code>## [1] 2.3</code></pre>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="kw">round</span>(<span class="fl">2.34</span>, <span class="dv">1</span>) <span class="co"># match by position</span></a></code></pre></div>
+<pre><code>## [1] 2.3</code></pre>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1"><span class="kw">round</span>(<span class="dv">1</span>, <span class="fl">2.34</span>) <span class="co"># be careful when matching by position!</span></a></code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1"><span class="kw">round</span>(<span class="dt">digits =</span> <span class="dv">1</span>, <span class="dt">x =</span> <span class="fl">2.34</span>) <span class="co"># matching by name is safer!</span></a></code></pre></div>
+<pre><code>## [1] 2.3</code></pre>
 </div>
 <div id="assignment" class="section level3">
 <h3>Assignment</h3>
@@ -1395,8 +1394,6 @@ gendered names like “Diana”. Splitting these trends out by <code>Sex</code> 
 <div id="exercise-3" class="section level3">
 <h3>Exercise 3</h3>
 <p><strong>Plot peak popularity of your name</strong></p>
-<p>Make sure the <code>tidyverse</code> suite of packages is installed, and that you
-have attached them using <code>library(tidyverse)</code>.</p>
 <ol style="list-style-type: decimal">
 <li><p>Use <code>filter</code> to extract data for your name (same as previous exercise)</p>
 <div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb102-1" data-line-number="1"><span class="co">##</span></a></code></pre></div></li>

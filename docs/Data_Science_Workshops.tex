@@ -1849,43 +1849,42 @@ Arguments can be \textbf{matched by name}; unnamed arguments will be \textbf{mat
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{values <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\FloatTok{1.45}\NormalTok{, }\FloatTok{2.34}\NormalTok{, }\FloatTok{5.68}\NormalTok{)}
-\KeywordTok{round}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ values, }\DataTypeTok{digits =} \DecValTok{1}\NormalTok{) }\CommentTok{# match by name}
+\KeywordTok{round}\NormalTok{(}\DataTypeTok{x =} \FloatTok{2.34}\NormalTok{, }\DataTypeTok{digits =} \DecValTok{1}\NormalTok{) }\CommentTok{# match by name}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 1.4 2.3 5.7
+## [1] 2.3
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{round}\NormalTok{(values, }\DecValTok{1}\NormalTok{) }\CommentTok{# match by position}
+\KeywordTok{round}\NormalTok{(}\FloatTok{2.34}\NormalTok{, }\DecValTok{1}\NormalTok{) }\CommentTok{# match by position}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 1.4 2.3 5.7
+## [1] 2.3
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{round}\NormalTok{(}\DecValTok{1}\NormalTok{, values) }\CommentTok{# be careful when matching by position!}
+\KeywordTok{round}\NormalTok{(}\DecValTok{1}\NormalTok{, }\FloatTok{2.34}\NormalTok{) }\CommentTok{# be careful when matching by position!}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 1 1 1
+## [1] 1
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{round}\NormalTok{(}\DataTypeTok{digits =} \DecValTok{1}\NormalTok{, }\DataTypeTok{x =}\NormalTok{ values) }\CommentTok{# matching by name is safer!}
+\KeywordTok{round}\NormalTok{(}\DataTypeTok{digits =} \DecValTok{1}\NormalTok{, }\DataTypeTok{x =} \FloatTok{2.34}\NormalTok{) }\CommentTok{# matching by name is safer!}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 1.4 2.3 5.7
+## [1] 2.3
 \end{verbatim}
 
 \hypertarget{assignment}{%
@@ -2677,9 +2676,6 @@ gendered names like ``Diana''. Splitting these trends out by \texttt{Sex} is ver
 \subsection{Exercise 3}\label{exercise-3}}
 
 \textbf{Plot peak popularity of your name}
-
-Make sure the \texttt{tidyverse} suite of packages is installed, and that you
-have attached them using \texttt{library(tidyverse)}.
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -3754,19 +3750,65 @@ a \texttt{formula} --- a symbolic representation of the model in R syntax:
 For example, the following model predicts SAT scores based on per-pupil expenditures:
 
 \[
-csat_i = \beta_01 + \beta_1expense_i + \epsilon_i
+csat_i = \beta_{0}1 + \beta_1expense_i + \epsilon_i
 \]
 
 We can use \texttt{lm()} to fit this model:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-  \CommentTok{# Fit our regression model}
+  \CommentTok{# fit our regression model}
 \NormalTok{  sat_mod <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(csat }\OperatorTok{~}\StringTok{ }\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{expense, }\CommentTok{# regression formula}
                 \DataTypeTok{data =}\NormalTok{ states_data) }\CommentTok{# data }
-                
-  \CommentTok{# Summarize and print the results}
-  \KeywordTok{summary}\NormalTok{(sat_mod) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{coef}\NormalTok{() }\CommentTok{# show regression coefficients table}
+
+  \CommentTok{# look at the basic printed output}
+\NormalTok{  sat_mod}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = csat ~ 1 + expense, data = states_data)
+## 
+## Coefficients:
+## (Intercept)      expense  
+##  1060.73244     -0.02228
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \CommentTok{# get more informative summary information }
+  \CommentTok{# about coefficients and goodness-of-fit}
+  \KeywordTok{summary}\NormalTok{(sat_mod)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = csat ~ 1 + expense, data = states_data)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -131.811  -38.085    5.607   37.852  136.495 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  1.061e+03  3.270e+01   32.44  < 2e-16 ***
+## expense     -2.228e-02  6.037e-03   -3.69 0.000563 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 59.81 on 49 degrees of freedom
+## Multiple R-squared:  0.2174, Adjusted R-squared:  0.2015 
+## F-statistic: 13.61 on 1 and 49 DF,  p-value: 0.0005631
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \CommentTok{# show only the regression coefficients table }
+  \KeywordTok{summary}\NormalTok{(sat_mod) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{coef}\NormalTok{() }
 \end{Highlighting}
 \end{Shaded}
 
@@ -3920,9 +3962,11 @@ Let's start by examining the model object:
 ##  [9] "xlevels"       "call"          "terms"         "model"
 \end{verbatim}
 
+We can list all the functions that extract particular quantities of interest (called \texttt{extractor\ functions}) by using the \texttt{methods()} function with the \texttt{class} argument set to the class of the model object:
+
 \begin{Shaded}
 \begin{Highlighting}[]
-  \KeywordTok{methods}\NormalTok{(}\DataTypeTok{class =} \KeywordTok{class}\NormalTok{(sat_mod))}
+\KeywordTok{methods}\NormalTok{(}\DataTypeTok{class =} \KeywordTok{class}\NormalTok{(sat_mod))}
 \end{Highlighting}
 \end{Shaded}
 
@@ -3939,11 +3983,11 @@ Let's start by examining the model object:
 ## see '?methods' for accessing help and source code
 \end{verbatim}
 
-We can use \texttt{function\ methods} to get more information about the fit:
+We can also use \texttt{function\ methods} to get more information about the fit:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-  \KeywordTok{summary}\NormalTok{(sat_mod)}
+  \KeywordTok{summary}\NormalTok{(sat_mod) }\CommentTok{# summary table}
 \end{Highlighting}
 \end{Shaded}
 
@@ -3970,19 +4014,38 @@ We can use \texttt{function\ methods} to get more information about the fit:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-  \KeywordTok{summary}\NormalTok{(sat_mod) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{coef}\NormalTok{()}
+  \KeywordTok{confint}\NormalTok{(sat_mod) }\CommentTok{# confidence intervals}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-##                  Estimate   Std. Error   t value     Pr(>|t|)
-## (Intercept) 1060.73244395 32.700896736 32.437412 8.878411e-35
-## expense       -0.02227565  0.006037115 -3.689783 5.630902e-04
+##                    2.5 %        97.5 %
+## (Intercept) 995.01753164 1126.44735626
+## expense      -0.03440768   -0.01014361
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-  \KeywordTok{methods}\NormalTok{(}\StringTok{"summary"}\NormalTok{)}
+  \KeywordTok{anova}\NormalTok{(sat_mod) }\CommentTok{# ANOVA table  }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Response: csat
+##           Df Sum Sq Mean Sq F value    Pr(>F)    
+## expense    1  48708   48708  13.614 0.0005631 ***
+## Residuals 49 175306    3578                      
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+How does R know which method to call for a given object? R uses \texttt{generic\ functions}, which provide access to \texttt{methods}. Method dispatch takes place based on the \texttt{class} of the first argument to the generic function. For example, for the generic function \texttt{summary()} and an object of class \texttt{lm}, the method dispatched will be \texttt{summary.lm()}. Function methods always take the form \texttt{generic.method()}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{methods}\NormalTok{(}\StringTok{"summary"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -4041,31 +4104,10 @@ We can use \texttt{function\ methods} to get more information about the fit:
 ## see '?methods' for accessing help and source code
 \end{verbatim}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-  \KeywordTok{confint}\NormalTok{(sat_mod)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-##                    2.5 %        97.5 %
-## (Intercept) 995.01753164 1126.44735626
-## expense      -0.03440768   -0.01014361
-\end{verbatim}
-
-How does R know which method to call for a given object?
-R uses \texttt{generic\ functions}, which provide access to \texttt{methods}.
-Method dispatch takes place based on the \texttt{class} of the
-first argument to the generic function. For example, for the generic
-function \texttt{summary()} and an object of class \texttt{lm}, the method
-dispatched will be \texttt{summary.lm()}. Function methods always take
-the form \texttt{generic.method()}:
-
 \includegraphics{R/Rmodels/images/methods.png}
 
-It's always worth examining what function methods are available for the class of model you're fitting.
-Here's a summary table of some of the most often used methods. These are post-estimation tools you
-will want in your toolbox:
+It's always worth examining whether the class of model you're fitting has a method for a particular extractor function.
+Here's a summary table of some of the most often used extractor functions, which have methods for a wide range of model classes. These are post-estimation tools you will want in your toolbox:
 
 \begin{longtable}[]{@{}lll@{}}
 \toprule
@@ -4214,7 +4256,7 @@ Investigate assumptions \#7 and \#8 visually by plotting your model:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rmodels/figures/unnamed-chunk-91-1.pdf}
+\includegraphics{R/Rmodels/figures/unnamed-chunk-93-1.pdf}
 
 \hypertarget{comparing-models}{%
 \subsection{Comparing models}\label{comparing-models}}
@@ -4294,7 +4336,9 @@ Now let's update our first model using \texttt{na.omit()}:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{  sat_mod <-}\StringTok{ }\KeywordTok{update}\NormalTok{(sat_mod, }\DataTypeTok{data =} \KeywordTok{na.omit}\NormalTok{(states_data))}
+\NormalTok{  sat_mod <-}\StringTok{ }
+\StringTok{      }\NormalTok{sat_mod }\OperatorTok{%>%}
+\StringTok{      }\KeywordTok{update}\NormalTok{(}\DataTypeTok{data =} \KeywordTok{na.omit}\NormalTok{(states_data))}
 
   \CommentTok{# compare using an F-test with the anova() function}
   \KeywordTok{anova}\NormalTok{(sat_mod, sat_voting_mod)}
@@ -4396,7 +4440,10 @@ Fit a model predicting energy consumed per capita (energy) from the percentage o
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{  states_en_met <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(states, }\DataTypeTok{select =} \KeywordTok{c}\NormalTok{(}\StringTok{"metro"}\NormalTok{, }\StringTok{"energy"}\NormalTok{))}
+\NormalTok{  states_en_met <-}\StringTok{ }
+\StringTok{      }\NormalTok{states }\OperatorTok{%>%}\StringTok{ }
+\StringTok{      }\KeywordTok{select}\NormalTok{(metro, energy)}
+
   \KeywordTok{summary}\NormalTok{(states_en_met)}
 \end{Highlighting}
 \end{Shaded}
@@ -4418,7 +4465,7 @@ Fit a model predicting energy consumed per capita (energy) from the percentage o
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rmodels/figures/unnamed-chunk-100-1.pdf}
+\includegraphics{R/Rmodels/figures/unnamed-chunk-102-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -4484,7 +4531,7 @@ Fit a model predicting energy consumed per capita (energy) from the percentage o
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rmodels/figures/unnamed-chunk-102-1.pdf}
+\includegraphics{R/Rmodels/figures/unnamed-chunk-104-1.pdf}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -4496,7 +4543,10 @@ Fit a model predicting energy consumed per capita (energy) from the percentage o
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{  states_en_met_pop_wst <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(states, }\DataTypeTok{select =} \KeywordTok{c}\NormalTok{(}\StringTok{"energy"}\NormalTok{, }\StringTok{"metro"}\NormalTok{, }\StringTok{"pop"}\NormalTok{, }\StringTok{"waste"}\NormalTok{))}
+\NormalTok{  states_en_met_pop_wst <-}\StringTok{ }
+\StringTok{      }\NormalTok{states }\OperatorTok{%>%}
+\StringTok{      }\KeywordTok{select}\NormalTok{(energy, metro, pop, waste)}
+
   \KeywordTok{summary}\NormalTok{(states_en_met_pop_wst)}
 \end{Highlighting}
 \end{Shaded}
@@ -4518,7 +4568,7 @@ Fit a model predicting energy consumed per capita (energy) from the percentage o
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rmodels/figures/unnamed-chunk-103-1.pdf}
+\includegraphics{R/Rmodels/figures/unnamed-chunk-105-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -4695,22 +4745,48 @@ So, make sure to tell R which variables are categorical by converting them to fa
 \hypertarget{setting-factor-reference-groups-contrasts}{%
 \subsection{Setting factor reference groups \& contrasts}\label{setting-factor-reference-groups-contrasts}}
 
-\textbf{Contrasts} is the umbrella term used to describe the process of testing linear combinations of parameters from regression models.
-All statistical sofware use contrasts, but each sofware has different defaults and their own way of overriding these.
+\textbf{Contrasts} is the umbrella term used to describe the process of testing linear combinations of parameters from regression models. All statistical sofware use contrasts, but each software has different defaults and their own way of overriding these.
 
-The default contrasts in R are ``treatment'' contrasts (aka ``dummy coding''), where each level within a factor
-is identified within a matrix of binary \texttt{0} / \texttt{1} variables, with the first level chosen as the reference category.
-They're called ``treatment'' contrasts, because of the typical use case where there is one control group (the reference group)
-and one or more treatment groups that are to be compared to the controls. It is easy to change the default contrasts to something
-other than treatment contrasts, though this is rarely needed. More often, we may want to change the reference group in
-treatment contrasts or get all sets of pairwise contrasts between factor levels.
+The default contrasts in R are ``treatment'' contrasts (aka ``dummy coding''), where each level within a factor is identified within a matrix of binary \texttt{0} / \texttt{1} variables, with the first level chosen as the reference category.They're called ``treatment'' contrasts, because of the typical use case where there is one control group (the reference group) and one or more treatment groups that are to be compared to the controls. It is easy to change the default contrasts to something other than treatment contrasts, though this is rarely needed. More often, we may want to change the reference group in treatment contrasts or get all sets of pairwise contrasts between factor levels.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \CommentTok{# default treatment (dummy) contrasts}
+  \KeywordTok{contrasts}\NormalTok{(states_data}\OperatorTok{$}\NormalTok{region)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         N. East South Midwest
+## West          0     0       0
+## N. East       1     0       0
+## South         0     1       0
+## Midwest       0     0       1
+\end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
   \CommentTok{# change the reference group}
 \NormalTok{  states_data}\OperatorTok{$}\NormalTok{region <-}\StringTok{ }\KeywordTok{relevel}\NormalTok{(states_data}\OperatorTok{$}\NormalTok{region, }\DataTypeTok{ref =} \StringTok{"Midwest"}\NormalTok{)}
-\NormalTok{  m1 <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(csat }\OperatorTok{~}\StringTok{ }\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{region, }\DataTypeTok{data =}\NormalTok{ states_data)}
-  \KeywordTok{summary}\NormalTok{(m1) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{coef}\NormalTok{()}
+
+  \CommentTok{# check the reference group has changed}
+  \KeywordTok{contrasts}\NormalTok{(states_data}\OperatorTok{$}\NormalTok{region)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         West N. East South
+## Midwest    0       0     0
+## West       1       0     0
+## N. East    0       1     0
+## South      0       0     1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \CommentTok{# refit the model}
+\NormalTok{  mod_region <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(csat }\OperatorTok{~}\StringTok{ }\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{region, }\DataTypeTok{data =}\NormalTok{ states_data)}
+  \KeywordTok{summary}\NormalTok{(mod_region) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{coef}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
@@ -4725,28 +4801,22 @@ treatment contrasts or get all sets of pairwise contrasts between factor levels.
 \begin{Shaded}
 \begin{Highlighting}[]
   \CommentTok{# get all pairwise contrasts between means}
-\NormalTok{  means <-}\StringTok{ }\KeywordTok{emmeans}\NormalTok{(m1, }\DataTypeTok{specs =} \OperatorTok{~}\StringTok{ }\NormalTok{region)}
-\NormalTok{  means}
+\NormalTok{  mod_region }\OperatorTok{%>%}
+\StringTok{      }\KeywordTok{emmeans}\NormalTok{(}\DataTypeTok{specs =}\NormalTok{ pairwise }\OperatorTok{~}\StringTok{ }\NormalTok{region)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
+## $emmeans
 ##  region  emmean   SE df lower.CL upper.CL
 ##  Midwest   1010 15.4 46      979     1041
 ##  West       946 14.8 46      917      976
 ##  N. East    890 17.8 46      854      925
 ##  South      930 13.3 46      903      957
 ## 
-## Confidence level used: 0.95
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-  \KeywordTok{contrast}\NormalTok{(means, }\DataTypeTok{method =} \StringTok{"pairwise"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
+## Confidence level used: 0.95 
+## 
+## $contrasts
 ##  contrast          estimate   SE df t.ratio p.value
 ##  Midwest - West        63.8 21.4 46  2.986  0.0226 
 ##  Midwest - N. East    120.5 23.5 46  5.124  <.0001 
@@ -4820,22 +4890,18 @@ Use the states data set.
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{  mod_en_region <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(energy }\OperatorTok{~}\StringTok{ }\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{metro }\OperatorTok{*}\StringTok{ }\NormalTok{waste }\OperatorTok{+}\StringTok{ }\NormalTok{region, }\DataTypeTok{data =}\NormalTok{ states)}
-  \KeywordTok{anova}\NormalTok{(mod_en_region)}
+  \KeywordTok{anova}\NormalTok{(mod_en_metro_by_waste, mod_en_region)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
 ## Analysis of Variance Table
 ## 
-## Response: energy
-##             Df Sum Sq Mean Sq F value  Pr(>F)  
-## metro        1 123064  123064  6.4435 0.01484 *
-## waste        1  10572   10572  0.5535 0.46093  
-## region       3 111128   37043  1.9395 0.13749  
-## metro:waste  1    156     156  0.0082 0.92835  
-## Residuals   43 821247   19099                  
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Model 1: energy ~ 1 + metro * waste
+## Model 2: energy ~ 1 + metro * waste + region
+##   Res.Df    RSS Df Sum of Sq    F Pr(>F)
+## 1     46 930683                         
+## 2     43 821247  3    109436 1.91 0.1422
 \end{verbatim}
 
 \hypertarget{models-with-binary-outcomes}{%
@@ -4918,7 +4984,7 @@ Let's predict the probability of being diagnosed with hypertension based on \tex
 Here's the model:
 
 \[
-logit(hypev_i) = \beta_01 + \beta_1agep_i + \beta_2sex_i + \beta_3sleep_i + \beta_4bmi_i + \epsilon_i 
+logit(hypev_i) = \beta_{0}1 + \beta_1agep_i + \beta_2sex_i + \beta_3sleep_i + \beta_4bmi_i + \epsilon_i 
 \]
 
 where \(logit(\cdot)\) is the link function, which is equivalent to the log odds of \texttt{hypev}:
@@ -5021,24 +5087,23 @@ Here we transform them into odds ratios by exponentiating:
 \hypertarget{predicted-marginal-means}{%
 \subsection{Predicted marginal means}\label{predicted-marginal-means}}
 
-Instead of reporting odds ratios, we may want to calculate predicted marginal means (sometimes called ``least squares means'').
-These are average values of the outcome at particular levels of the predictors. For ease of interpretation, we want these
-marginal means to be on the response scale (i.e., the probability scale). We can use the \texttt{effects} package to compute
-these quantities of interest for us (by default, the numerical output will be on the response scale).
+Instead of reporting odds ratios, we may want to calculate predicted marginal means (sometimes called ``least squares means''). These are average values of the outcome at particular levels of the predictors. For ease of interpretation, we want these marginal means to be on the response scale (i.e., the probability scale). We can use the \texttt{effects} package to compute these quantities of interest for us (by default, the numerical output will be on the response scale).
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{  eff <-}\StringTok{ }\KeywordTok{allEffects}\NormalTok{(hyp_out)}
-  \KeywordTok{plot}\NormalTok{(eff, }\DataTypeTok{type =} \StringTok{"response"}\NormalTok{) }\CommentTok{# "response" refers to the probability scale}
+\NormalTok{  hyp_out }\OperatorTok{%>%}\StringTok{ }
+\StringTok{      }\KeywordTok{allEffects}\NormalTok{() }\OperatorTok{%>%}
+\StringTok{      }\KeywordTok{plot}\NormalTok{(}\DataTypeTok{type =} \StringTok{"response"}\NormalTok{) }\CommentTok{# "response" refers to the probability scale}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rmodels/figures/unnamed-chunk-117-1.pdf}
+\includegraphics{R/Rmodels/figures/unnamed-chunk-119-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-  \CommentTok{# generate a sequence at which to get predictions of the outcome}
-  \KeywordTok{seq}\NormalTok{(}\DecValTok{20}\NormalTok{, }\DecValTok{80}\NormalTok{, }\DataTypeTok{by =} \DecValTok{5}\NormalTok{)}
+  \CommentTok{# generate a sequence of ages at which to get predictions of the outcome}
+\NormalTok{  age_years <-}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\DecValTok{20}\NormalTok{, }\DecValTok{80}\NormalTok{, }\DataTypeTok{by =} \DecValTok{5}\NormalTok{)}
+\NormalTok{  age_years}
 \end{Highlighting}
 \end{Shaded}
 
@@ -5048,9 +5113,11 @@ these quantities of interest for us (by default, the numerical output will be on
 
 \begin{Shaded}
 \begin{Highlighting}[]
-  \CommentTok{# override defaults}
-\NormalTok{  eff <-}\StringTok{ }\KeywordTok{allEffects}\NormalTok{(hyp_out, }\DataTypeTok{xlevels =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{age_p =} \KeywordTok{seq}\NormalTok{(}\DecValTok{20}\NormalTok{, }\DecValTok{80}\NormalTok{, }\DataTypeTok{by =} \DecValTok{5}\NormalTok{)))}
-\NormalTok{  eff_df <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(eff) }\CommentTok{# confidence intervals}
+\NormalTok{  eff_df <-}\StringTok{ }
+\StringTok{      }\NormalTok{hyp_out }\OperatorTok{%>%}\StringTok{ }
+\StringTok{      }\KeywordTok{allEffects}\NormalTok{(}\DataTypeTok{xlevels =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{age_p =}\NormalTok{ age_years)) }\OperatorTok{%>%}\StringTok{ }\CommentTok{# override defaults for age}
+\StringTok{      }\KeywordTok{as.data.frame}\NormalTok{() }\CommentTok{# get confidence intervals}
+  
 \NormalTok{  eff_df}
 \end{Highlighting}
 \end{Shaded}
@@ -5143,9 +5210,11 @@ Use the NH11 data set that we loaded earlier. Note that the data is not perfectl
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{  NH11 <-}\StringTok{ }\KeywordTok{mutate}\NormalTok{(NH11,}
-                     \DataTypeTok{everwrk =} \KeywordTok{factor}\NormalTok{(everwrk, }\DataTypeTok{levels =} \KeywordTok{c}\NormalTok{(}\StringTok{"1 Yes"}\NormalTok{, }\StringTok{"2 No"}\NormalTok{)),}
-                     \DataTypeTok{r_maritl =} \KeywordTok{droplevels}\NormalTok{(r_maritl))}
+\NormalTok{  NH11 <-}\StringTok{ }
+\StringTok{      }\NormalTok{NH11 }\OperatorTok{%>%}
+\StringTok{      }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{everwrk =} \KeywordTok{factor}\NormalTok{(everwrk, }\DataTypeTok{levels =} \KeywordTok{c}\NormalTok{(}\StringTok{"1 Yes"}\NormalTok{, }\StringTok{"2 No"}\NormalTok{)),}
+             \DataTypeTok{r_maritl =} \KeywordTok{droplevels}\NormalTok{(r_maritl)}
+\NormalTok{             )}
 
 \NormalTok{  mod_wk_age_mar <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(everwrk }\OperatorTok{~}\StringTok{ }\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{age_p }\OperatorTok{+}\StringTok{ }\NormalTok{r_maritl, }
                         \DataTypeTok{data =}\NormalTok{ NH11,}
@@ -5209,8 +5278,9 @@ Use the NH11 data set that we loaded earlier. Note that the data is not perfectl
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{  eff <-}\StringTok{ }\KeywordTok{allEffects}\NormalTok{(mod_wk_age_mar)}
-  \KeywordTok{as.data.frame}\NormalTok{(eff)}
+\NormalTok{  mod_wk_age_mar }\OperatorTok{%>%}\StringTok{ }
+\StringTok{      }\KeywordTok{allEffects}\NormalTok{() }\OperatorTok{%>%}
+\StringTok{      }\KeywordTok{as.data.frame}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
@@ -5317,8 +5387,7 @@ As a preliminary step it is often useful to partition the variance in the depend
 \begin{Highlighting}[]
   \CommentTok{# anatomy of lmer() function}
   \KeywordTok{lmer}\NormalTok{(outcome }\OperatorTok{~}\StringTok{ }\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{pred1 }\OperatorTok{+}\StringTok{ }\NormalTok{pred2 }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{grouping_variable), }
-       \DataTypeTok{data =}\NormalTok{ mydata, }
-       \DataTypeTok{REML =} \OtherTok{FALSE}\NormalTok{)}
+       \DataTypeTok{data =}\NormalTok{ mydata)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -5326,32 +5395,31 @@ As a preliminary step it is often useful to partition the variance in the depend
 \begin{Highlighting}[]
   \CommentTok{# null model, grouping by school but not fixed effects.}
 \NormalTok{  Norm1 <-}\KeywordTok{lmer}\NormalTok{(normexam }\OperatorTok{~}\StringTok{ }\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{school), }
-              \DataTypeTok{data =} \KeywordTok{na.omit}\NormalTok{(Exam), }\DataTypeTok{REML =} \OtherTok{FALSE}\NormalTok{)}
+              \DataTypeTok{data =} \KeywordTok{na.omit}\NormalTok{(Exam))}
   \KeywordTok{summary}\NormalTok{(Norm1)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## Linear mixed model fit by maximum likelihood  ['lmerMod']
+## Linear mixed model fit by REML ['lmerMod']
 ## Formula: normexam ~ 1 + (1 | school)
 ##    Data: na.omit(Exam)
 ## 
-##      AIC      BIC   logLik deviance df.resid 
-##   9964.9   9983.5  -4979.4   9958.9     3659 
+## REML criterion at convergence: 9962.9
 ## 
 ## Scaled residuals: 
 ##     Min      1Q  Median      3Q     Max 
-## -3.8751 -0.6460  0.0045  0.6898  3.6842 
+## -3.8749 -0.6452  0.0045  0.6888  3.6836 
 ## 
 ## Random effects:
 ##  Groups   Name        Variance Std.Dev.
-##  school   (Intercept) 0.1606   0.4007  
+##  school   (Intercept) 0.1634   0.4042  
 ##  Residual             0.8520   0.9231  
 ## Number of obs: 3662, groups:  school, 65
 ## 
 ## Fixed effects:
 ##             Estimate Std. Error t value
-## (Intercept) -0.01301    0.05270  -0.247
+## (Intercept) -0.01310    0.05312  -0.247
 \end{verbatim}
 
 The is .161/(.161 + .852) = .159 = 16\% of the variance is at the school level.
@@ -5366,41 +5434,40 @@ approximation).
 Here's a model that predicts exam scores from student's standardized tests scores:
 
 \[
-normexam_{ij} = \mu + \beta_1standLRT_{ij} + U_{0j} + \epsilon_{ij}
+normexam_{ij} = \mu1 + \beta_1standLRT_{ij} + U_{0j} + \epsilon_{ij}
 \]
 
-where \(U_{0j}\) is the random intercept for \texttt{school}. Let's implement this in R using \texttt{lmer()}:
+where \(U_{0j}\) is the random intercept for the \(j\)th \texttt{school}. Let's implement this in R using \texttt{lmer()}:
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{  Norm2 <-}\KeywordTok{lmer}\NormalTok{(normexam }\OperatorTok{~}\StringTok{ }\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{standLRT }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{school),}
-               \DataTypeTok{data =} \KeywordTok{na.omit}\NormalTok{(Exam), }\DataTypeTok{REML =} \OtherTok{FALSE}\NormalTok{) }
+               \DataTypeTok{data =} \KeywordTok{na.omit}\NormalTok{(Exam)) }
   \KeywordTok{summary}\NormalTok{(Norm2) }
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## Linear mixed model fit by maximum likelihood  ['lmerMod']
+## Linear mixed model fit by REML ['lmerMod']
 ## Formula: normexam ~ 1 + standLRT + (1 | school)
 ##    Data: na.omit(Exam)
 ## 
-##      AIC      BIC   logLik deviance df.resid 
-##   8480.1   8505.0  -4236.1   8472.1     3658 
+## REML criterion at convergence: 8483.5
 ## 
 ## Scaled residuals: 
 ##     Min      1Q  Median      3Q     Max 
-## -3.6722 -0.6300  0.0236  0.6770  3.3347 
+## -3.6725 -0.6300  0.0234  0.6777  3.3340 
 ## 
 ## Random effects:
 ##  Groups   Name        Variance Std.Dev.
-##  school   (Intercept) 0.09197  0.3033  
-##  Residual             0.56909  0.7544  
+##  school   (Intercept) 0.09369  0.3061  
+##  Residual             0.56924  0.7545  
 ## Number of obs: 3662, groups:  school, 65
 ## 
 ## Fixed effects:
-##              Estimate Std. Error t value
-## (Intercept) 1.913e-05  4.022e-02    0.00
-## standLRT    5.670e-01  1.324e-02   42.84
+##               Estimate Std. Error t value
+## (Intercept) -4.313e-05  4.055e-02  -0.001
+## standLRT     5.669e-01  1.324e-02  42.821
 ## 
 ## Correlation of Fixed Effects:
 ##          (Intr)
@@ -5410,7 +5477,7 @@ where \(U_{0j}\) is the random intercept for \texttt{school}. Let's implement th
 \hypertarget{multiple-degree-of-freedom-comparisons}{%
 \subsection{Multiple degree of freedom comparisons}\label{multiple-degree-of-freedom-comparisons}}
 
-As with \texttt{lm()} and \texttt{glm()} models, you can compare the two \texttt{lmer()} models using a likelihood ratio test with the \texttt{anova()} function.
+As with \texttt{lm()} and \texttt{glm()} models, you can compare the two \texttt{lmer()} models using the \texttt{anova()} function. With mixed effects models, this will produce a likelihood ratio test.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -5438,38 +5505,37 @@ Add a random effect of students' standardized test scores as well. Now in additi
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{  Norm3 <-}\StringTok{ }\KeywordTok{lmer}\NormalTok{(normexam }\OperatorTok{~}\StringTok{ }\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{standLRT }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{standLRT }\OperatorTok{|}\StringTok{ }\NormalTok{school), }
-                \DataTypeTok{data =} \KeywordTok{na.omit}\NormalTok{(Exam), }\DataTypeTok{REML =} \OtherTok{FALSE}\NormalTok{) }
+                \DataTypeTok{data =} \KeywordTok{na.omit}\NormalTok{(Exam)) }
   \KeywordTok{summary}\NormalTok{(Norm3) }
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## Linear mixed model fit by maximum likelihood  ['lmerMod']
+## Linear mixed model fit by REML ['lmerMod']
 ## Formula: normexam ~ 1 + standLRT + (1 + standLRT | school)
 ##    Data: na.omit(Exam)
 ## 
-##      AIC      BIC   logLik deviance df.resid 
-##   8444.1   8481.4  -4216.1   8432.1     3656 
+## REML criterion at convergence: 8442.8
 ## 
 ## Scaled residuals: 
 ##     Min      1Q  Median      3Q     Max 
-## -3.7894 -0.6233  0.0242  0.6736  3.4372 
+## -3.7904 -0.6246  0.0245  0.6734  3.4376 
 ## 
 ## Random effects:
 ##  Groups   Name        Variance Std.Dev. Corr
-##  school   (Intercept) 0.08926  0.2988       
-##           standLRT    0.01592  0.1262   0.50
-##  Residual             0.55591  0.7456       
+##  school   (Intercept) 0.09092  0.3015       
+##           standLRT    0.01639  0.1280   0.49
+##  Residual             0.55589  0.7456       
 ## Number of obs: 3662, groups:  school, 65
 ## 
 ## Fixed effects:
 ##             Estimate Std. Error t value
-## (Intercept) -0.01237    0.03978  -0.311
-## standLRT     0.56111    0.02100  26.714
+## (Intercept) -0.01250    0.04011  -0.312
+## standLRT     0.56094    0.02119  26.474
 ## 
 ## Correlation of Fixed Effects:
 ##          (Intr)
-## standLRT 0.361
+## standLRT 0.360
 \end{verbatim}
 
 \hypertarget{test-the-significance-of-the-random-slope}{%
@@ -5576,6 +5642,7 @@ Use the dataset, bh1996:
 
 \begin{Shaded}
 \begin{Highlighting}[]
+  \CommentTok{# install.packages("multilevel")}
   \KeywordTok{data}\NormalTok{(bh1996, }\DataTypeTok{package=}\StringTok{"multilevel"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -5595,7 +5662,7 @@ Variables are Leadership Climate (\texttt{LEAD}), Well-Being (\texttt{WBEING}), 
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{  mod_grp0 <-}\StringTok{ }\KeywordTok{lmer}\NormalTok{(WBEING }\OperatorTok{~}\StringTok{ }\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{GRP), }\DataTypeTok{data =}\NormalTok{ bh1996)}
+\NormalTok{  mod_grp0 <-}\StringTok{ }\KeywordTok{lmer}\NormalTok{(WBEING }\OperatorTok{~}\StringTok{ }\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{GRP), }\DataTypeTok{data =} \KeywordTok{na.omit}\NormalTok{(bh1996))}
   \KeywordTok{summary}\NormalTok{(mod_grp0)}
 \end{Highlighting}
 \end{Shaded}
@@ -5603,7 +5670,7 @@ Variables are Leadership Climate (\texttt{LEAD}), Well-Being (\texttt{WBEING}), 
 \begin{verbatim}
 ## Linear mixed model fit by REML ['lmerMod']
 ## Formula: WBEING ~ 1 + (1 | GRP)
-##    Data: bh1996
+##    Data: na.omit(bh1996)
 ## 
 ## REML criterion at convergence: 19347.3
 ## 
@@ -5632,7 +5699,7 @@ Variables are Leadership Climate (\texttt{LEAD}), Well-Being (\texttt{WBEING}), 
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{  mod_grp1 <-}\StringTok{ }\KeywordTok{lmer}\NormalTok{(WBEING }\OperatorTok{~}\StringTok{ }\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{HRS }\OperatorTok{+}\StringTok{ }\NormalTok{LEAD }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{GRP), }\DataTypeTok{data =}\NormalTok{ bh1996)}
+\NormalTok{  mod_grp1 <-}\StringTok{ }\KeywordTok{lmer}\NormalTok{(WBEING }\OperatorTok{~}\StringTok{ }\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{HRS }\OperatorTok{+}\StringTok{ }\NormalTok{LEAD }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{GRP), }\DataTypeTok{data =} \KeywordTok{na.omit}\NormalTok{(bh1996))}
   \KeywordTok{summary}\NormalTok{(mod_grp1)}
 \end{Highlighting}
 \end{Shaded}
@@ -5640,7 +5707,7 @@ Variables are Leadership Climate (\texttt{LEAD}), Well-Being (\texttt{WBEING}), 
 \begin{verbatim}
 ## Linear mixed model fit by REML ['lmerMod']
 ## Formula: WBEING ~ 1 + HRS + LEAD + (1 | GRP)
-##    Data: bh1996
+##    Data: na.omit(bh1996)
 ## 
 ## REML criterion at convergence: 17860
 ## 
@@ -5676,13 +5743,13 @@ Variables are Leadership Climate (\texttt{LEAD}), Well-Being (\texttt{WBEING}), 
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{  mod_grp2 <-}\StringTok{ }\KeywordTok{lmer}\NormalTok{(WBEING }\OperatorTok{~}\StringTok{ }\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{HRS }\OperatorTok{+}\StringTok{ }\NormalTok{LEAD }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{HRS }\OperatorTok{|}\StringTok{ }\NormalTok{GRP), }\DataTypeTok{data =}\NormalTok{ bh1996)}
+\NormalTok{  mod_grp2 <-}\StringTok{ }\KeywordTok{lmer}\NormalTok{(WBEING }\OperatorTok{~}\StringTok{ }\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{HRS }\OperatorTok{+}\StringTok{ }\NormalTok{LEAD }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{HRS }\OperatorTok{|}\StringTok{ }\NormalTok{GRP), }\DataTypeTok{data =} \KeywordTok{na.omit}\NormalTok{(bh1996))}
   \KeywordTok{anova}\NormalTok{(mod_grp1, mod_grp2)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## Data: bh1996
+## Data: na.omit(bh1996)
 ## Models:
 ## mod_grp1: WBEING ~ 1 + HRS + LEAD + (1 | GRP)
 ## mod_grp2: WBEING ~ 1 + HRS + LEAD + (1 + HRS | GRP)
@@ -6082,7 +6149,7 @@ Let's look at housing prices.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-142-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-144-1.pdf}
 
 \textbf{Step 2:} specify aesthetic mappings (how you want to map variables to visual aspects):
 
@@ -6093,7 +6160,7 @@ Let's look at housing prices.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-143-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-145-1.pdf}
 
 \textbf{Step 3:} add new layers of geometric objects that will show up on the plot:
 
@@ -6106,7 +6173,7 @@ Let's look at housing prices.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-144-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-146-1.pdf}
 
 \hypertarget{lines-prediction-line}{%
 \subsubsection{Lines (prediction line)}\label{lines-prediction-line}}
@@ -6126,7 +6193,7 @@ A plot constructed with \texttt{ggplot()} can have more than one geom. In that c
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-145-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-147-1.pdf}
 
 \hypertarget{smoothers}{%
 \subsubsection{Smoothers}\label{smoothers}}
@@ -6141,7 +6208,7 @@ Not all geometric objects are simple shapes; the smooth geom includes a line and
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-146-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-148-1.pdf}
 
 \hypertarget{text-label-points}{%
 \subsubsection{Text (label points)}\label{text-label-points}}
@@ -6155,7 +6222,7 @@ Each geom accepts a particular set of mappings; for example \texttt{geom\_text()
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-147-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-149-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -6165,7 +6232,7 @@ Each geom accepts a particular set of mappings; for example \texttt{geom\_text()
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-148-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-150-1.pdf}
 
 \hypertarget{aesthetic-mapping-vs-assignment}{%
 \subsection{Aesthetic mapping VS assignment}\label{aesthetic-mapping-vs-assignment}}
@@ -6184,7 +6251,7 @@ Each geom accepts a particular set of mappings; for example \texttt{geom\_text()
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-149-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-151-1.pdf}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -6201,7 +6268,7 @@ Each geom accepts a particular set of mappings; for example \texttt{geom\_text()
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-150-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-152-1.pdf}
 
 This sometimes leads to confusion, as in this example:
 
@@ -6213,7 +6280,7 @@ This sometimes leads to confusion, as in this example:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-151-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-153-1.pdf}
 
 \hypertarget{mapping-variables-to-other-aesthetics}{%
 \subsection{Mapping variables to other aesthetics}\label{mapping-variables-to-other-aesthetics}}
@@ -6227,7 +6294,7 @@ Other aesthetics are mapped in the same way as x and y in the previous example.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-152-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-154-1.pdf}
 
 \hypertarget{exercise-0-2}{%
 \subsection{Exercise 0}\label{exercise-0-2}}
@@ -6329,7 +6396,7 @@ These data consist of \emph{Human Development Index} and \emph{Corruption Percep
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-159-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-161-1.pdf}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -6346,7 +6413,7 @@ These data consist of \emph{Human Development Index} and \emph{Corruption Percep
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-160-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-162-1.pdf}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -6363,7 +6430,7 @@ These data consist of \emph{Human Development Index} and \emph{Corruption Percep
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-161-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-163-1.pdf}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -6380,7 +6447,7 @@ These data consist of \emph{Human Development Index} and \emph{Corruption Percep
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-162-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-164-1.pdf}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -6397,7 +6464,7 @@ These data consist of \emph{Human Development Index} and \emph{Corruption Percep
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-163-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-165-1.pdf}
 
 \hypertarget{statistical-transformations}{%
 \section{Statistical transformations}\label{statistical-transformations}}
@@ -6460,7 +6527,7 @@ For example, here is the default histogram of \texttt{Home\_Value}:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-165-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-167-1.pdf}
 
 can change it by passing the \texttt{binwidth} argument to the \texttt{stat\_bin()} function:
 
@@ -6470,7 +6537,7 @@ can change it by passing the \texttt{binwidth} argument to the \texttt{stat\_bin
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-166-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-168-1.pdf}
 
 \hypertarget{changing-the-transformation}{%
 \subsection{Changing the transformation}\label{changing-the-transformation}}
@@ -6519,7 +6586,7 @@ What is the problem with the previous plot? Basically we take binned and summari
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-169-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-171-1.pdf}
 
 \hypertarget{exercise-1-2}{%
 \subsection{Exercise 1}\label{exercise-1-2}}
@@ -6609,7 +6676,7 @@ What is the problem with the previous plot? Basically we take binned and summari
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-175-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-177-1.pdf}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -6627,7 +6694,7 @@ What is the problem with the previous plot? Basically we take binned and summari
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-176-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-178-1.pdf}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -6645,7 +6712,7 @@ What is the problem with the previous plot? Basically we take binned and summari
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-177-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-179-1.pdf}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -6663,7 +6730,7 @@ What is the problem with the previous plot? Basically we take binned and summari
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-178-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-180-1.pdf}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -6681,7 +6748,7 @@ What is the problem with the previous plot? Basically we take binned and summari
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-179-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-181-1.pdf}
 
 \hypertarget{scales}{%
 \section{Scales}\label{scales}}
@@ -6750,7 +6817,7 @@ Now modify the breaks for the color scales
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-181-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-183-1.pdf}
 
 Next change the low and high values to blue and red:
 
@@ -6764,7 +6831,7 @@ Next change the low and high values to blue and red:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-182-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-184-1.pdf}
 
 \hypertarget{using-different-color-scales}{%
 \subsection{Using different color scales}\label{using-different-color-scales}}
@@ -6784,7 +6851,7 @@ Next change the low and high values to blue and red:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-183-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-185-1.pdf}
 
 \hypertarget{available-scales}{%
 \subsection{Available scales}\label{available-scales}}
@@ -6881,7 +6948,7 @@ For a complete list of available scales see \url{https://ggplot2.tidyverse.org/r
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-187-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-189-1.pdf}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -6901,7 +6968,7 @@ For a complete list of available scales see \url{https://ggplot2.tidyverse.org/r
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-188-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-190-1.pdf}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -6922,7 +6989,7 @@ For a complete list of available scales see \url{https://ggplot2.tidyverse.org/r
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-189-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-191-1.pdf}
 
 \hypertarget{faceting}{%
 \section{Faceting}\label{faceting}}
@@ -6967,7 +7034,7 @@ For a complete list of available scales see \url{https://ggplot2.tidyverse.org/r
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-190-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-192-1.pdf}
 
 There are two problems here; there are too many states to distinguish each one by color, and the lines obscure one another.
 
@@ -6984,7 +7051,7 @@ We can remedy the deficiencies of the previous plot by faceting by \texttt{State
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-191-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-193-1.pdf}
 
 \hypertarget{themes}{%
 \section{Themes}\label{themes}}
@@ -7024,7 +7091,7 @@ Built-in themes include:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-192-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-194-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -7032,7 +7099,7 @@ Built-in themes include:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-193-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-195-1.pdf}
 You can see a list of available built-in themes here \url{https://ggplot2.tidyverse.org/reference/}
 
 \hypertarget{overriding-theme-defaults}{%
@@ -7049,7 +7116,7 @@ Specific theme elements can be overridden using \texttt{theme()}. For example:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-194-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-196-1.pdf}
 
 All theme options are documented in \texttt{?theme}. We can also see the
 existing default values using:
@@ -7079,7 +7146,7 @@ You can create new themes, as in the following example:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-196-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-198-1.pdf}
 
 \hypertarget{saving-plots}{%
 \section{Saving plots}\label{saving-plots}}
@@ -7132,7 +7199,7 @@ Fixing, rather than mapping, the color aesthetic:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-198-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-200-1.pdf}
 
 \textbf{Right}
 
@@ -7156,7 +7223,7 @@ Here's the code that implements this transformation:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-199-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-201-1.pdf}
 
 \hypertarget{exercise-3-2}{%
 \subsection{Exercise 3}\label{exercise-3-2}}
@@ -7287,7 +7354,7 @@ For this exercise, we're going to use the built-in \texttt{midwest} dataset:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-207-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-209-1.pdf}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -7378,7 +7445,7 @@ Here's the complete code for the Exercise 3 plot:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/Rgraphics/figures/unnamed-chunk-213-1.pdf}
+\includegraphics{R/Rgraphics/figures/unnamed-chunk-215-1.pdf}
 
 \hypertarget{wrap-up-3}{%
 \section{Wrap-up}\label{wrap-up-3}}
@@ -9286,7 +9353,7 @@ information to each data frame before flattening.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{R/RDataWrangling/figures/unnamed-chunk-258-1.pdf}
+\includegraphics{R/RDataWrangling/figures/unnamed-chunk-260-1.pdf}
 
 \hypertarget{complete-code}{%
 \section{Complete code}\label{complete-code}}
@@ -11631,16 +11698,16 @@ into a pandas \texttt{DataFrame} to facilitate subsequent analysis.
 
 \begin{verbatim}
 ##    accessionyear             technique  ...  classification                        seeAlso
-## 0            NaN         Daguerreotype  ...     Photographs  [{'id': 'https://iiif.harv...
-## 1         2002.0            Lusterware  ...         Vessels  [{'id': 'https://iiif.harv...
-## 2         1939.0                  None  ...        Drawings  [{'id': 'https://iiif.harv...
-## 3         2006.0                  None  ...       Paintings  [{'id': 'https://iiif.harv...
-## 4            NaN  Etching and drypoint  ...          Prints  [{'id': 'https://iiif.harv...
-## 5         1984.0                  None  ...     Manuscripts  [{'id': 'https://iiif.harv...
-## 6         2001.0                  None  ...       Paintings  [{'id': 'https://iiif.harv...
-## 7         2010.0          Photogravure  ...     Photographs  [{'id': 'https://iiif.harv...
-## 8         2004.0                  None  ...        Drawings  [{'id': 'https://iiif.harv...
-## 9         1943.0                  None  ...       Sculpture  [{'id': 'https://iiif.harv...
+## 0           2006                  None  ...       Paintings  [{'id': 'https://iiif.harv...
+## 1           1943                  None  ...        Drawings  [{'id': 'https://iiif.harv...
+## 2           1942               Etching  ...          Prints  [{'id': 'https://iiif.harv...
+## 3           2009                  None  ...        Drawings  [{'id': 'https://iiif.harv...
+## 4           1994                  None  ...         Vessels  [{'id': 'https://iiif.harv...
+## 5           2011  Albumen silver print  ...     Photographs  [{'id': 'https://iiif.harv...
+## 6           1928            Lithograph  ...          Prints  [{'id': 'https://iiif.harv...
+## 7           1984  Gelatin silver print  ...     Photographs  [{'id': 'https://iiif.harv...
+## 8           1986            Lithograph  ...          Prints  [{'id': 'https://iiif.harv...
+## 9           2005               Etching  ...          Prints  [{'id': 'https://iiif.harv...
 ## 
 ## [10 rows x 61 columns]
 \end{verbatim}
@@ -11693,57 +11760,57 @@ Python, we can iterate in the usual way.
 \end{Shaded}
 
 \begin{verbatim}
-##     accessionyear               technique  ...                        seeAlso                        details
-## 0             NaN           Daguerreotype  ...  [{'id': 'https://iiif.harv...                            NaN
-## 1          2002.0              Lusterware  ...  [{'id': 'https://iiif.harv...                            NaN
-## 2          1939.0                    None  ...  [{'id': 'https://iiif.harv...                            NaN
-## 3          2006.0                    None  ...  [{'id': 'https://iiif.harv...                            NaN
-## 4             NaN    Etching and drypoint  ...  [{'id': 'https://iiif.harv...                            NaN
-## 5          1984.0                    None  ...  [{'id': 'https://iiif.harv...                            NaN
-## 6          2001.0                    None  ...  [{'id': 'https://iiif.harv...                            NaN
-## 7          2010.0            Photogravure  ...  [{'id': 'https://iiif.harv...                            NaN
-## 8          2004.0                    None  ...  [{'id': 'https://iiif.harv...                            NaN
-## 9          1943.0                    None  ...  [{'id': 'https://iiif.harv...                            NaN
-## 10         2008.0           Daguerreotype  ...  [{'id': 'https://iiif.harv...                            NaN
-## 11         2009.0            Offset print  ...  [{'id': 'https://iiif.harv...                            NaN
-## 12         2000.0               Engraving  ...  [{'id': 'https://iiif.harv...                            NaN
-## 13            NaN               Engraving  ...  [{'id': 'https://iiif.harv...                            NaN
-## 14         1997.0    Gelatin silver print  ...  [{'id': 'https://iiif.harv...                            NaN
-## 15         1999.0                    None  ...  [{'id': 'https://iiif.harv...                            NaN
-## 16         2002.0                    None  ...  [{'id': 'https://iiif.harv...                            NaN
-## 17            NaN                    None  ...  [{'id': 'https://iiif.harv...                            NaN
-## 18         2000.0                 Etching  ...  [{'id': 'https://iiif.harv...                            NaN
-## 19         2005.0     Chiaroscuro woodcut  ...  [{'id': 'https://iiif.harv...                            NaN
-## 20         2010.0           Pigment print  ...  [{'id': 'https://iiif.harv...                            NaN
-## 21         1982.0                    None  ...  [{'id': 'https://iiif.harv...                            NaN
-## 22         2007.0                    None  ...  [{'id': 'https://iiif.harv...                            NaN
-## 23         1986.0  Cast, lost-wax process  ...  [{'id': 'https://iiif.harv...  {'technical': [{'text': 'I...
-## 24         2008.0                    None  ...  [{'id': 'https://iiif.harv...                            NaN
-## 25         2007.0                    None  ...  [{'id': 'https://iiif.harv...                            NaN
-## 26         1943.0                    None  ...  [{'id': 'https://iiif.harv...                            NaN
-## 27         1973.0        Photoscreenprint  ...  [{'id': 'https://iiif.harv...                            NaN
-## 28         2008.0       Chromogenic print  ...  [{'id': 'https://iiif.harv...                            NaN
-## 29         1917.0                    None  ...  [{'id': 'https://iiif.harv...                            NaN
-## 30         1965.0                    None  ...  [{'id': 'https://iiif.harv...                            NaN
-## 31         1984.0                    None  ...  [{'id': 'https://iiif.harv...                            NaN
-## 32         1940.0                  Relief  ...  [{'id': 'https://iiif.harv...                            NaN
-## 33         2005.0                    None  ...  [{'id': 'https://iiif.harv...                            NaN
-## 34         2002.0                  Struck  ...  [{'id': 'https://iiif.harv...  {'coins': {'dateonobject':...
-## 35         1996.0                    None  ...  [{'id': 'https://iiif.harv...                            NaN
-## 36         1956.0                    None  ...  [{'id': 'https://iiif.harv...                            NaN
-## 37         1929.0    Etching and aquatint  ...  [{'id': 'https://iiif.harv...                            NaN
-## 38         1968.0                    None  ...  [{'id': 'https://iiif.harv...                            NaN
-## 39         1951.0                  Struck  ...  [{'id': 'https://iiif.harv...  {'coins': {'dateonobject':...
-## 40         2003.0                    None  ...  [{'id': 'https://iiif.harv...                            NaN
-## 41         2011.0    Gelatin silver print  ...  [{'id': 'https://iiif.harv...                            NaN
-## 42         2007.0       Cast and hammered  ...  [{'id': 'https://iiif.harv...  {'technical': [{'text': '2...
-## 43         2002.0               Mold-made  ...  [{'id': 'https://iiif.harv...                            NaN
-## 44         1978.0                    None  ...  [{'id': 'https://iiif.harv...                            NaN
-## 45         2009.0            Photogravure  ...  [{'id': 'https://iiif.harv...                            NaN
-## 46         1985.0                    None  ...  [{'id': 'https://iiif.harv...                            NaN
-## 47         1940.0     Chiaroscuro woodcut  ...  [{'id': 'https://iiif.harv...                            NaN
-## 48         2008.0              Lithograph  ...  [{'id': 'https://iiif.harv...                            NaN
-## 49         1991.0                 Celadon  ...  [{'id': 'https://iiif.harv...                            NaN
+##     accessionyear                      technique  ...                        seeAlso                        details
+## 0          2006.0                           None  ...  [{'id': 'https://iiif.harv...                            NaN
+## 1          1943.0                           None  ...  [{'id': 'https://iiif.harv...                            NaN
+## 2          1942.0                        Etching  ...  [{'id': 'https://iiif.harv...                            NaN
+## 3          2009.0                           None  ...  [{'id': 'https://iiif.harv...                            NaN
+## 4          1994.0                           None  ...  [{'id': 'https://iiif.harv...                            NaN
+## 5          2011.0           Albumen silver print  ...  [{'id': 'https://iiif.harv...                            NaN
+## 6          1928.0                     Lithograph  ...  [{'id': 'https://iiif.harv...                            NaN
+## 7          1984.0           Gelatin silver print  ...  [{'id': 'https://iiif.harv...                            NaN
+## 8          1986.0                     Lithograph  ...  [{'id': 'https://iiif.harv...                            NaN
+## 9          2005.0                        Etching  ...  [{'id': 'https://iiif.harv...                            NaN
+## 10         2008.0           Gelatin silver print  ...  [{'id': 'https://iiif.harv...                            NaN
+## 11         1985.0                           None  ...  [{'id': 'https://iiif.harv...                            NaN
+## 12         1991.0                        Celadon  ...  [{'id': 'https://iiif.harv...                            NaN
+## 13            NaN                     Lithograph  ...  [{'id': 'https://iiif.harv...                            NaN
+## 14         1933.0                           None  ...  [{'id': 'https://iiif.harv...                            NaN
+## 15         1996.0                           None  ...  [{'id': 'https://iiif.harv...                            NaN
+## 16         2006.0                           None  ...  [{'id': 'https://iiif.harv...                            NaN
+## 17         1939.0                           None  ...  [{'id': 'https://iiif.harv...                            NaN
+## 18         1960.0                     Lithograph  ...  [{'id': 'https://iiif.harv...                            NaN
+## 19         2007.0             Iris digital print  ...  [{'id': 'https://iiif.harv...                            NaN
+## 20         1931.0                         Molded  ...  [{'id': 'https://iiif.harv...                            NaN
+## 21         1955.0                        Woodcut  ...  [{'id': 'https://iiif.harv...                            NaN
+## 22         1972.0                           None  ...  [{'id': 'https://iiif.harv...                            NaN
+## 23         2010.0                   Photogravure  ...  [{'id': 'https://iiif.harv...                            NaN
+## 24         1961.0                           None  ...  [{'id': 'https://iiif.harv...                            NaN
+## 25         1923.0                           None  ...  [{'id': 'https://iiif.harv...                            NaN
+## 26         2002.0                      Mold-made  ...  [{'id': 'https://iiif.harv...                            NaN
+## 27         2006.0  Drypoint, softground etchi...  ...  [{'id': 'https://iiif.harv...                            NaN
+## 28         1943.0                           None  ...  [{'id': 'https://iiif.harv...                            NaN
+## 29         1961.0            Blue-and-white ware  ...  [{'id': 'https://iiif.harv...                            NaN
+## 30         2009.0                   Photogravure  ...  [{'id': 'https://iiif.harv...                            NaN
+## 31         1995.0                           None  ...  [{'id': 'https://iiif.harv...                            NaN
+## 32         2000.0                       Monotype  ...  [{'id': 'https://iiif.harv...                            NaN
+## 33         2000.0           Etching and aquatint  ...  [{'id': 'https://iiif.harv...                            NaN
+## 34         1933.0                           None  ...  [{'id': 'https://iiif.harv...                            NaN
+## 35            NaN                      Engraving  ...  [{'id': 'https://iiif.harv...                            NaN
+## 36         2001.0                           None  ...  [{'id': 'https://iiif.harv...                            NaN
+## 37         1934.0                           None  ...  [{'id': 'https://iiif.harv...                            NaN
+## 38         2008.0              Chromogenic print  ...  [{'id': 'https://iiif.harv...                            NaN
+## 39         1951.0                         Struck  ...  [{'id': 'https://iiif.harv...  {'coins': {'dateonobject':...
+## 40         1989.0                Photolithograph  ...  [{'id': 'https://iiif.harv...                            NaN
+## 41         1985.0                           None  ...  [{'id': 'https://iiif.harv...                            NaN
+## 42         1943.0                           None  ...  [{'id': 'https://iiif.harv...                            NaN
+## 43         1972.0                        Painted  ...  [{'id': 'https://iiif.harv...                            NaN
+## 44         2011.0           Gelatin silver print  ...  [{'id': 'https://iiif.harv...                            NaN
+## 45         1958.0                           None  ...  [{'id': 'https://iiif.harv...                            NaN
+## 46         1923.0                        Painted  ...  [{'id': 'https://iiif.harv...                            NaN
+## 47         2005.0                           None  ...  [{'id': 'https://iiif.harv...                            NaN
+## 48         1942.0                           None  ...  [{'id': 'https://iiif.harv...                            NaN
+## 49         2003.0                           None  ...  [{'id': 'https://iiif.harv...                            NaN
 ## 
 ## [50 rows x 62 columns]
 \end{verbatim}
@@ -12187,15 +12254,16 @@ Finally, we can iterate over the elements we want and extract them.
 \end{Shaded}
 
 \begin{verbatim}
-## {'date': 'Thursday, February 20, 2020',
-##  'figcaption': 'Seydou Keïta, Malian, Untitled, portrait of man and daughter, '
-##                '1956–57, printed later. Gelatin silver print. Harvard Art '
-##                'Museums/Fogg Museum, Gift of Peter Soriano, P1997.7.',
+## {'date': 'Friday, February 28, 2020',
+##  'figcaption': 'Willem van Haecht I, Netherlandish, after Frans Floris, '
+##                'Netherlandish, Allegory on the Pacification of Ghent, 1577. '
+##                'Engraving. Harvard Art Museums/Fogg Museum, Gift of Robert '
+##                'Bradford Wheaton and Barbara Ketcham Wheaton, 2006.166.',
 ##  'localtion1': '32 Quincy Street',
 ##  'location2': 'Cambridge',
-##  'time': '12:30pm - 1:00pm',
-##  'title': 'Gallery Talk: Seydou Keïta and Malick Sidibé: Studio Photography in '
-##           'Mali'}
+##  'time': '11:00am - 12:00pm',
+##  'title': 'Art Study Center Seminar: Publishing Prints in the Netherlands in '
+##           'the 16th and 17th Centuries [AT CAPACITY]'}
 \end{verbatim}
 
 \hypertarget{iterating-to-retrieve-content-from-a-list-of-html-elements}{%
@@ -12265,20 +12333,20 @@ and save them as .csv files, just as we did with our exhibitions data earlier.
 \end{Shaded}
 
 \begin{verbatim}
-##                  figcaption                         date  ...        localtion1  location2
-## 0     Seydou Keïta, Malian,  Thursday, February 20, 2020  ...  32 Quincy Street  Cambridge
-## 1   Alberto Burri, Italian,    Friday, February 21, 2020  ...  32 Quincy Street  Cambridge
-## 2                            Saturday, February 22, 2020  ...  32 Quincy Street  Cambridge
-## 3                            Saturday, February 22, 2020  ...  32 Quincy Street  Cambridge
-## 4                              Sunday, February 23, 2020  ...  32 Quincy Street  Cambridge
-## ..                      ...                          ...  ...               ...        ...
-## 76     Photo: Tim Correira.      Wednesday, May 20, 2020  ...  32 Quincy Street  Cambridge
-## 77                                  Monday, May 25, 2020  ...  32 Quincy Street  Cambridge
-## 78           Maruyama Ōkyo,        Tuesday, May 26, 2020  ...  32 Quincy Street  Cambridge
-## 79      László Moholy-Nagy,       Thursday, May 28, 2020  ...  32 Quincy Street  Cambridge
-## 80     Photo: Tim Correira.     Wednesday, June 17, 2020  ...  32 Quincy Street  Cambridge
+##                        figcaption                         date  ...        localtion1  location2
+## 0   Willem van Haecht I, Nethe...    Friday, February 28, 2020  ...  32 Quincy Street  Cambridge
+## 1           © Peter Vanderwarker.    Friday, February 28, 2020  ...  32 Quincy Street  Cambridge
+## 2                  Maruyama Ōkyo,  Saturday, February 29, 2020  ...  32 Quincy Street  Cambridge
+## 3                                  Saturday, February 29, 2020  ...  32 Quincy Street  Cambridge
+## 4                                  Saturday, February 29, 2020  ...  32 Quincy Street  Cambridge
+## ..                            ...                          ...  ...               ...        ...
+## 75                  © Susan Young      Wednesday, May 27, 2020  ...  32 Quincy Street  Cambridge
+## 76  Lewis W. Rubenstein, Ameri...      Wednesday, May 27, 2020  ...  32 Quincy Street  Cambridge
+## 77                                      Thursday, May 28, 2020  ...  32 Quincy Street  Cambridge
+## 78            László Moholy-Nagy,       Thursday, May 28, 2020  ...  32 Quincy Street  Cambridge
+## 79           Photo: Tim Correira.     Wednesday, June 17, 2020  ...  32 Quincy Street  Cambridge
 ## 
-## [81 rows x 6 columns]
+## [80 rows x 6 columns]
 \end{verbatim}
 
 \hypertarget{exercise-1-5}{%
